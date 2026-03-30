@@ -18,13 +18,12 @@ const PRODUCTS = [
 function CheckoutContent() {
   const searchParams = useSearchParams();
   const productId = searchParams.get("productId");
-  const isBuyNow = searchParams.get("action") === "buy-now";
-
+  
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState<"full" | "cod">("cod");
   
-  // Advance Payment Fields
+  // Payment Verification Fields
   const [transId, setTransId] = useState("");
   const [payNumber, setPayNumber] = useState("");
 
@@ -55,7 +54,7 @@ function CheckoutContent() {
                 ORDER <span className="text-accent">PLACED!</span>
             </h1>
             <p className="text-sm text-secondary leading-relaxed">
-                Thank you for your purchase. We have received your order details. {paymentMethod === 'cod' ? 'আমাদের টিম আপনার পেমেন্ট স্ক্রিনশট এবং ট্রানজ্যাকশন আইডি যাচাই করে অর্ডারটি কনফার্ম করবে।' : 'অর্ডারটি পাওয়ার জন্য ধন্যবাদ।'} আমাদের প্রতিনিধি শীঘ্রই আপনাকে কল করবে।
+                Thank you for your purchase. We have received your order details and payment information. আমাদের টিম আপনার ট্রানজ্যাকশন আইডি যাচাই করে অর্ডারটি কনফার্ম করবে।
             </p>
             <div className="pt-4">
                 <button 
@@ -124,7 +123,7 @@ function CheckoutContent() {
                                 <span className="font-bold text-sm uppercase">Cash on Delivery (COD)</span>
                                 {paymentMethod === 'cod' && <div className="w-4 h-4 rounded-full bg-accent border-4 border-white" />}
                             </div>
-                            <p className="text-[10px] text-secondary mt-1 tracking-wider uppercase font-bold">Requires ৳150 Advance Delivery Charge</p>
+                            <p className="text-[10px] text-secondary mt-1 tracking-wider uppercase font-bold">Pay ৳150 advance for shipping</p>
                         </label>
 
                         <label className={`block p-4 border-2 rounded-sm cursor-pointer transition-all ${paymentMethod === 'full' ? 'border-accent bg-accent/5' : 'border-black/5'}`}>
@@ -139,64 +138,65 @@ function CheckoutContent() {
                                 <span className="font-bold text-sm uppercase">Full Payment (Advanced)</span>
                                 {paymentMethod === 'full' && <div className="w-4 h-4 rounded-full bg-accent border-4 border-white" />}
                             </div>
-                            <p className="text-[10px] text-secondary mt-1 tracking-wider uppercase font-bold">Pay the whole amount online for priority shipping</p>
+                            <p className="text-[10px] text-secondary mt-1 tracking-wider uppercase font-bold">Pay the entire amount online for priority shipping</p>
                         </label>
                     </div>
 
-                    {/* Conditional Advance Payment Details */}
-                    {paymentMethod === 'cod' && (
-                        <div className="animate-in slide-in-from-top-4 duration-300 space-y-6">
-                            <div className="p-5 bg-primary text-white rounded-sm">
-                                <h4 className="font-heading font-black italic tracking-tighter uppercase mb-2">Advance Payment Instructions</h4>
-                                <p className="text-xs text-white/70 leading-relaxed mb-4">
-                                    অর্ডারটি কনফার্ম করতে ডেলিভারি চার্জ ৳১৫০ অগ্রিম প্রদান করুন (বিকাশ অথবা নগদ)। পেমেন্ট করার পর ট্রানজ্যাকশন আইডি এবং নম্বরটি নিচে দিন।
-                                </p>
-                                <div className="grid grid-cols-2 gap-4">
-                                    <div className="bg-white/10 p-3 rounded-sm border border-white/10">
-                                        <p className="text-[8px] font-bold uppercase tracking-widest opacity-60">BKash (Personal)</p>
-                                        <p className="text-sm font-black tracking-widest">01700-000000</p>
-                                    </div>
-                                    <div className="bg-white/10 p-3 rounded-sm border border-white/10">
-                                        <p className="text-[8px] font-bold uppercase tracking-widest opacity-60">Nagad (Personal)</p>
-                                        <p className="text-sm font-black tracking-widest">01800-000000</p>
-                                    </div>
+                    {/* Universal Payment Details */}
+                    <div className="animate-in slide-in-from-top-4 duration-300 space-y-6">
+                        <div className="p-5 bg-primary text-white rounded-sm">
+                            <h4 className="font-heading font-black italic tracking-tighter uppercase mb-2">Payment Instructions</h4>
+                            <p className="text-xs text-white/70 leading-relaxed mb-4">
+                                {paymentMethod === 'cod' 
+                                    ? `অর্ডারটি কনফার্ম করতে ডেলিভারি চার্জ ৳${deliveryCharge} অগ্রিম প্রদান করুন।` 
+                                    : `অর্ডারটি কনফার্ম করতে সম্পূর্ণ মূল্য ৳${total.toLocaleString()} প্রদান করুন।`
+                                } বিকাশ অথবা নগদ (Personal) নাম্বারে সেন্ড মানি করার পর নিচের তথ্যগুলো দিন।
+                            </p>
+                            <div className="grid grid-cols-2 gap-4">
+                                <div className="bg-white/10 p-3 rounded-sm border border-white/10">
+                                    <p className="text-[8px] font-bold uppercase tracking-widest opacity-60">BKash (Personal)</p>
+                                    <p className="text-sm font-black tracking-widest">01700-000000</p>
                                 </div>
-                            </div>
-                            
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div className="space-y-2">
-                                    <label className="text-[10px] font-black uppercase tracking-widest text-secondary">Payment Number</label>
-                                    <input 
-                                        required 
-                                        type="tel" 
-                                        value={payNumber}
-                                        onChange={(e) => setPayNumber(e.target.value)}
-                                        className="w-full bg-background border border-black/10 px-4 py-3 text-sm focus:outline-none focus:border-accent transition-colors" 
-                                        placeholder="01XXXXXXXXX" 
-                                    />
-                                </div>
-                                <div className="space-y-2">
-                                    <label className="text-[10px] font-black uppercase tracking-widest text-secondary">Transaction ID</label>
-                                    <input 
-                                        required 
-                                        type="text" 
-                                        value={transId}
-                                        onChange={(e) => setTransId(e.target.value)}
-                                        className="w-full bg-background border border-black/10 px-4 py-3 text-sm focus:outline-none focus:border-accent transition-colors" 
-                                        placeholder="TRX12345678" 
-                                    />
-                                </div>
-                            </div>
-                            
-                            <div className="space-y-2">
-                                <label className="text-[10px] font-black uppercase tracking-widest text-secondary">Payment Screenshot (Optional)</label>
-                                <div className="border-2 border-dashed border-black/10 p-10 text-center rounded-sm hover:border-accent transition-colors cursor-pointer group">
-                                    <svg className="w-10 h-10 text-black/10 mx-auto group-hover:text-accent transition-colors mb-2" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>
-                                    <p className="text-[10px] font-bold text-secondary uppercase tracking-widest">Click to upload screenshot</p>
+                                <div className="bg-white/10 p-3 rounded-sm border border-white/10">
+                                    <p className="text-[8px] font-bold uppercase tracking-widest opacity-60">Nagad (Personal)</p>
+                                    <p className="text-sm font-black tracking-widest">01800-000000</p>
                                 </div>
                             </div>
                         </div>
-                    )}
+                        
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div className="space-y-2">
+                                <label className="text-[10px] font-black uppercase tracking-widest text-accent/80">Sender Mobile Number</label>
+                                <input 
+                                    required 
+                                    type="tel" 
+                                    value={payNumber}
+                                    onChange={(e) => setPayNumber(e.target.value)}
+                                    className="w-full bg-background border border-black/10 px-4 py-3 text-sm focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent/20 transition-all font-medium" 
+                                    placeholder="01XXXXXXXXX" 
+                                />
+                            </div>
+                            <div className="space-y-2">
+                                <label className="text-[10px] font-black uppercase tracking-widest text-accent/80">Transaction ID</label>
+                                <input 
+                                    required 
+                                    type="text" 
+                                    value={transId}
+                                    onChange={(e) => setTransId(e.target.value)}
+                                    className="w-full bg-background border border-black/10 px-4 py-3 text-sm focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent/20 transition-all font-medium" 
+                                    placeholder="TRX12345678" 
+                                />
+                            </div>
+                        </div>
+                        
+                        <div className="space-y-2">
+                            <label className="text-[10px] font-black uppercase tracking-widest text-accent/80">Payment Screenshot (Upload)</label>
+                            <div className="border-2 border-dashed border-black/10 p-10 text-center rounded-sm hover:border-accent transition-colors cursor-pointer group">
+                                <svg className="w-10 h-10 text-black/10 mx-auto group-hover:text-accent transition-colors mb-2" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>
+                                <p className="text-[10px] font-bold text-secondary uppercase tracking-widest">Click to upload screenshot</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -241,14 +241,14 @@ function CheckoutContent() {
                         {isSubmitting ? (
                              <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
                         ) : (
-                            <span>{paymentMethod === 'cod' ? 'Pay Advance & Confirm' : 'Confirm Order'}</span>
+                            <span>Confirm Order & Pay</span>
                         )}
                     </button>
                     
                     <div className="p-4 bg-background rounded-sm border border-black/5">
                          <div className="flex items-center space-x-3 text-[9px] font-bold text-secondary uppercase tracking-widest">
                             <svg className="w-4 h-4 text-accent" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-                            <span>Verified Secure Payment by Zevens Security</span>
+                            <span>Verified Secure Order by Zevens Security</span>
                          </div>
                     </div>
                 </div>
