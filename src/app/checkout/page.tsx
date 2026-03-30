@@ -84,7 +84,7 @@ function CheckoutContent() {
             {/* Customer Details */}
             <div className="space-y-10">
                 <div className="bg-surface p-8 rounded-sm shadow-sm space-y-6">
-                    <h3 className="font-heading font-bold text-sm tracking-widest uppercase border-b border-black/5 pb-4">Contact Information</h3>
+                    <h3 className="font-heading font-bold text-sm tracking-widest uppercase border-l-4 border-accent pl-4 text-accent">Contact Information</h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div className="space-y-2">
                              <label className="text-[10px] font-black uppercase tracking-widest text-secondary">Full Name</label>
@@ -103,7 +103,7 @@ function CheckoutContent() {
 
                 {/* Payment Selection */}
                 <div className="bg-surface p-8 rounded-sm shadow-sm space-y-8">
-                    <h3 className="font-heading font-bold text-sm tracking-widest uppercase border-b border-black/5 pb-4">Payment Selection</h3>
+                    <h3 className="font-heading font-bold text-sm tracking-widest uppercase border-l-4 border-accent pl-4 text-accent">Payment Selection</h3>
                     
                     <div className="space-y-4">
                         <label className={`block p-4 border-2 rounded-sm cursor-pointer transition-all ${paymentMethod === 'cod' ? 'border-accent bg-accent/5' : 'border-black/5'}`}>
