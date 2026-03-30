@@ -35,7 +35,7 @@ export default function Navbar() {
           <Link href="/products?category=women" className="hover:text-accent transition-colors uppercase">
             WOMEN'S
           </Link>
-          <Link href="/about" className="hover:text-accent transition-colors">
+          <Link href="/about-us" className="hover:text-accent transition-colors">
             ABOUT
           </Link>
         </div>
