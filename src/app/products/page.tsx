@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 
-// Mock data (matches FeaturedProducts for consistency)
+// Updated Mock data with Bags and Pre-order status
 const ALL_PRODUCTS = [
   {
     id: "1",
@@ -9,7 +9,17 @@ const ALL_PRODUCTS = [
     category: "Running",
     price: 18500,
     image: "/images/prod1.png",
-    tag: "Trending"
+    tag: "Trending",
+    status: "in-stock"
+  },
+  {
+    id: "b1",
+    name: "Urban Stealth Backpack",
+    category: "Bags",
+    price: 12500,
+    image: "/images/men-cat.png", // Using cat image as placeholder
+    tag: "New Arrival",
+    status: "in-stock"
   },
   {
     id: "2",
@@ -17,7 +27,17 @@ const ALL_PRODUCTS = [
     category: "Training",
     price: 14200,
     image: "/images/prod2.png",
-    tag: "New"
+    tag: "New",
+    status: "pre-order"
+  },
+  {
+    id: "b2",
+    name: "Lux Handbag Gold",
+    category: "Bags",
+    price: 28000,
+    image: "/images/women-cat.png", // Using cat image as placeholder
+    tag: "Exclusive",
+    status: "in-stock"
   },
   {
     id: "3",
@@ -25,7 +45,8 @@ const ALL_PRODUCTS = [
     category: "Lifestyle",
     price: 22000,
     image: "/images/prod3.png",
-    tag: "Exclusive"
+    tag: "Exclusive",
+    status: "in-stock"
   },
   {
     id: "4",
@@ -33,23 +54,8 @@ const ALL_PRODUCTS = [
     category: "Training",
     price: 15500,
     image: "/images/prod2.png",
-    tag: ""
-  },
-  {
-    id: "5",
-    name: "Arctic High",
-    category: "Lifestyle",
-    price: 19800,
-    image: "/images/prod3.png",
-    tag: "Limited"
-  },
-  {
-    id: "6",
-    name: "Crimson Peak",
-    category: "Running",
-    price: 17200,
-    image: "/images/prod1.png",
-    tag: ""
+    tag: "",
+    status: "pre-order"
   }
 ];
 
@@ -61,16 +67,16 @@ export default function ProductsPage() {
             <h1 className="text-5xl font-heading font-black italic tracking-tighter mb-4 italic uppercase">
                 Product <span className="text-accent">Catalog.</span>
             </h1>
-            <p className="text-secondary">Discover our wide range of premium footwear.</p>
+            <p className="text-secondary">Discover our wide range of premium footwear and bags.</p>
         </header>
 
-        <div className="flex flex-col lg:row gap-12">
-            {/* Filter Sidebar Placeholder */}
+        <div className="flex flex-col lg:flex-row gap-12">
+            {/* Filter Sidebar */}
             <aside className="w-full lg:w-64 space-y-8">
                 <div>
                     <h3 className="font-heading font-bold text-sm uppercase tracking-widest mb-4">Categories</h3>
                     <div className="space-y-2">
-                        {["All", "Running", "Training", "Lifestyle", "Basketball"].map(cat => (
+                        {["All", "Running", "Training", "Lifestyle", "Bags"].map(cat => (
                             <label key={cat} className="flex items-center space-x-3 cursor-pointer group">
                                 <div className="w-4 h-4 border border-black/10 rounded-sm group-hover:border-accent transition-colors" />
                                 <span className="text-sm text-secondary group-hover:text-primary">{cat}</span>
@@ -79,11 +85,16 @@ export default function ProductsPage() {
                     </div>
                 </div>
                 <div>
-                    <h3 className="font-heading font-bold text-sm uppercase tracking-widest mb-4">Price Range</h3>
-                    <input type="range" className="w-full accent-accent" />
-                    <div className="flex justify-between text-[10px] font-bold text-secondary mt-2">
-                        <span>৳ 5,000</span>
-                        <span>৳ 50,000</span>
+                    <h3 className="font-heading font-bold text-sm uppercase tracking-widest mb-4">Availability</h3>
+                    <div className="space-y-2">
+                         <label className="flex items-center space-x-3 cursor-pointer group">
+                                <div className="w-4 h-4 border border-black/10 rounded-sm group-hover:border-accent transition-colors" />
+                                <span className="text-sm text-secondary group-hover:text-primary">In Stock</span>
+                         </label>
+                         <label className="flex items-center space-x-3 cursor-pointer group">
+                                <div className="w-4 h-4 border border-black/10 rounded-sm group-hover:border-accent transition-colors" />
+                                <span className="text-sm text-secondary group-hover:text-primary">Pre-order</span>
+                         </label>
                     </div>
                 </div>
             </aside>
@@ -105,6 +116,11 @@ export default function ProductsPage() {
                                         {product.tag}
                                     </span>
                                 )}
+                                {product.status === "pre-order" && (
+                                    <span className="absolute top-4 right-4 px-3 py-1 bg-accent text-white text-[10px] font-bold uppercase tracking-widest">
+                                        Pre-order
+                                    </span>
+                                )}
                                 <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center translate-y-4 group-hover:translate-y-0 transform">
                                     <Link 
                                         href={`/products/${product.id}`}
@@ -120,6 +136,9 @@ export default function ProductsPage() {
                                     <h3 className="font-heading font-bold text-lg group-hover:text-accent transition-colors leading-tight">{product.name}</h3>
                                     <p className="font-heading font-black text-base">৳{product.price.toLocaleString()}</p>
                                 </div>
+                                <p className={`text-[9px] font-bold uppercase tracking-tighter ${product.status === 'in-stock' ? 'text-green-600' : 'text-accent'}`}>
+                                    {product.status === 'in-stock' ? '✓ Ready to ship' : '⌛ Pre-order (Ships in 2 weeks)'}
+                                </p>
                             </div>
                         </div>
                     ))}

@@ -15,13 +15,25 @@ const PRODUCTS = [
     image: "/images/prod1.png",
     description: "Built for elite performance. The Aether Blue features our most advanced cushioning system yet, providing ultimate energy return and futuristic aesthetics.",
     features: ["Responsive Cushioning", "Breathable Mesh Upper", "Carbon Fiber Plate", "Durable All-Weather Outsole"],
-    sizes: [38, 39, 40, 41, 42, 43, 44]
+    sizes: [38, 39, 40, 41, 42, 43, 44],
+    status: "in-stock"
+  },
+  {
+    id: "2",
+    name: "Neon Velocity",
+    category: "Training",
+    price: 14200,
+    image: "/images/prod2.png",
+    description: "Lightning fast. The Neon Velocity is designed for explosive movements and high-intensity training sessions.",
+    features: ["Lightweight build", "Lateral stability", "High-grip outsole"],
+    sizes: [40, 41, 42, 43],
+    status: "pre-order"
   }
 ];
 
 export default function ProductDetailPage() {
   const { id } = useParams();
-  const product = PRODUCTS.find(p => p.id === id) || PRODUCTS[0]; // Fallback to first for mock
+  const product = PRODUCTS.find(p => p.id === id) || PRODUCTS[0]; 
   const [selectedSize, setSelectedSize] = useState<number | null>(null);
 
   return (
@@ -42,6 +54,11 @@ export default function ProductDetailPage() {
                         fill
                         className="object-contain p-12 transform group-hover:scale-105 transition-transform duration-700"
                     />
+                    {product.status === "pre-order" && (
+                        <div className="absolute top-6 left-6 bg-accent text-white px-4 py-2 font-black text-xs uppercase tracking-widest z-20">
+                            PRE-ORDER ONLY
+                        </div>
+                    )}
                 </div>
                 <div className="grid grid-cols-4 gap-4">
                     {[1, 2, 3, 4].map(idx => (
@@ -60,10 +77,15 @@ export default function ProductDetailPage() {
             {/* Product Info */}
             <div className="space-y-8">
                 <div className="space-y-2">
-                    <p className="text-secondary font-bold text-xs uppercase tracking-[0.3em]">
-                        {product.category}
-                    </p>
-                    <h1 className="text-5xl font-heading font-black italic tracking-tighter italic italic uppercase italic">
+                    <div className="flex items-center space-x-3">
+                        <p className="text-secondary font-bold text-xs uppercase tracking-[0.3em]">
+                            {product.category}
+                        </p>
+                        {product.status === "pre-order" && (
+                            <span className="bg-accent/10 text-accent px-2 py-0.5 text-[9px] font-black uppercase tracking-tighter">Limited Release</span>
+                        )}
+                    </div>
+                    <h1 className="text-5xl font-heading font-black italic tracking-tighter uppercase">
                         {product.name}
                     </h1>
                     <p className="text-3xl font-heading font-black text-accent mt-2">
@@ -105,14 +127,22 @@ export default function ProductDetailPage() {
                 </div>
 
                 <div className="pt-8 space-y-4">
-                    <button className="w-full py-5 bg-primary text-white font-black uppercase tracking-tighter hover:bg-accent transition-all duration-300 transform active:scale-[0.98]">
-                        Add to Cart
+                    <button className={`w-full py-5 text-white font-black uppercase tracking-tighter transition-all duration-300 transform active:scale-[0.98] ${product.status === 'pre-order' ? 'bg-accent hover:bg-black' : 'bg-primary hover:bg-accent'}`}>
+                        {product.status === 'pre-order' ? 'Pre-order Now' : 'Add to Cart'}
                     </button>
+                    
                     <div className="flex flex-col gap-3 py-6 border-y border-black/5">
-                         <div className="flex items-center space-x-3 text-xs font-bold text-secondary uppercase tracking-widest">
-                            <span className="w-2 h-2 bg-green-500 rounded-full" />
-                            <span>In Stock - Ready to Ship</span>
-                         </div>
+                         {product.status === 'in-stock' ? (
+                            <div className="flex items-center space-x-3 text-xs font-bold text-green-600 uppercase tracking-widest">
+                                <span className="w-2 h-2 bg-green-500 rounded-full" />
+                                <span>In Stock - Ready to Ship</span>
+                            </div>
+                         ) : (
+                            <div className="flex items-center space-x-3 text-xs font-bold text-accent uppercase tracking-widest">
+                                <span className="w-2 h-2 bg-accent rounded-full animate-pulse" />
+                                <span>Pre-order: Estimated shipping in 10-14 days</span>
+                            </div>
+                         )}
                          <div className="flex justify-between items-center text-xs text-secondary font-medium">
                             <p>Free Delivery on orders over ৳ 30,000</p>
                             <Link href="/shipping" className="underline hover:text-accent">Shipping Info</Link>
