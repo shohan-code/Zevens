@@ -3,13 +3,27 @@ import FeaturedProducts from "@/components/home/FeaturedProducts";
 import Image from "next/image";
 import Link from "next/link";
 
+const SHOE_PRODUCTS = [
+  { id: "1", name: "Aether Blue Edition", price: 18500, image: "/images/prod1.png", gender: "Men" },
+  { id: "2", name: "Neon Velocity", price: 14200, image: "/images/prod2.png", gender: "Women" },
+  { id: "3", name: "Urban Lux Gold", price: 22000, image: "/images/prod3.png", gender: "Men" },
+  { id: "4", name: "Stealth Runner", price: 15500, image: "/images/prod2.png", gender: "Women" }
+];
+
+const BAG_PRODUCTS = [
+  { id: "b1", name: "Urban Stealth Backpack", price: 12500, image: "/images/hero.png", gender: "Men" },
+  { id: "b2", name: "Lux Handbag Gold", price: 28000, image: "/images/prod3.png", gender: "Women" },
+  { id: "b3", name: "Daily Sling Bag", price: 8500, image: "/images/prod1.png", gender: "Unisex" },
+  { id: "b4", name: "Elite Travel Duffle", price: 32000, image: "/images/prod2.png", gender: "Men" }
+];
+
 export default function Home() {
   return (
     <div className="min-h-screen">
       <HeroSection />
       
-      {/* Trust / Benefits Section - New */}
-      <section className="py-12 bg-white border-y border-black/5">
+      {/* Trust / Benefits Section */}
+      <section className="py-8 bg-white border-y border-black/5">
         <div className="container mx-auto px-6">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
                 {[
@@ -18,10 +32,10 @@ export default function Home() {
                     { title: "PRE-ORDER SYSTEM", desc: "Get exclusive early access to the latest global drops.", icon: "⌛" }
                 ].map((benefit, i) => (
                     <div key={i} className="flex items-start space-x-4 group cursor-default">
-                        <div className="text-3xl grayscale group-hover:grayscale-0 transition-all">{benefit.icon}</div>
+                        <div className="text-2xl grayscale group-hover:grayscale-0 transition-all">{benefit.icon}</div>
                         <div>
-                            <h4 className="font-heading font-black text-sm tracking-widest text-primary italic uppercase">{benefit.title}</h4>
-                            <p className="text-xs text-secondary mt-1 max-w-[200px] leading-relaxed">{benefit.desc}</p>
+                            <h4 className="font-heading font-black text-[10px] tracking-widest text-primary italic uppercase">{benefit.title}</h4>
+                            <p className="text-[10px] text-secondary mt-0.5 max-w-[200px] leading-tight">{benefit.desc}</p>
                         </div>
                     </div>
                 ))}
@@ -31,95 +45,123 @@ export default function Home() {
 
       <FeaturedProducts />
       
-      {/* Category Selection Section - Polished */}
-      <section className="py-24 bg-background">
+      {/* Compact Category Selection Section */}
+      <section className="py-20 bg-background">
         <div className="container mx-auto px-6">
-            <div className="text-center mb-20">
-                <span className="text-accent font-bold tracking-[0.4em] text-[10px] uppercase mb-4 block">COLLECTIONS</span>
-                <h2 className="text-5xl md:text-6xl font-heading font-black italic tracking-tighter uppercase mb-6">
+            <div className="text-center mb-12">
+                <span className="text-accent font-black tracking-[0.4em] text-[8px] uppercase mb-2 block">COLLECTIONS</span>
+                <h2 className="text-3xl md:text-4xl font-heading font-black italic tracking-tighter uppercase mb-4">
                   Shop by <span className="text-accent">Category.</span>
                 </h2>
-                <div className="w-20 h-1 bg-accent mx-auto" />
+                <div className="w-12 h-1 bg-accent mx-auto" />
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {/* Men's Category */}
-                <div className="group relative h-[650px] overflow-hidden bg-surface shadow-md">
+                <div className="group relative h-[450px] overflow-hidden bg-surface shadow-sm rounded-sm">
                     <Image 
                         src="/images/men-cat.png" 
                         alt="Men's Shoes and Bags" 
                         fill 
-                        className="object-cover object-top transform group-hover:scale-105 transition-transform duration-1000 ease-out grayscale-[0.2] group-hover:grayscale-0"
+                        className="object-cover object-top transform group-hover:scale-105 transition-transform duration-1000 ease-out"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent opacity-80" />
-                    <div className="absolute bottom-12 left-10 text-white z-20">
-                        <p className="text-accent font-bold tracking-[0.3em] text-[10px] uppercase mb-2 block">FOR HIM</p>
-                        <h3 className="text-6xl font-heading font-black tracking-tighter italic mb-6">MEN'S <br /> DROPS.</h3>
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-90" />
+                    <div className="absolute bottom-8 left-8 text-white z-20">
+                        <p className="text-accent font-bold tracking-[0.3em] text-[8px] uppercase mb-1 block">FOR HIM</p>
+                        <h3 className="text-4xl font-heading font-black tracking-tighter italic mb-4">MEN'S <br /> COLLECTION.</h3>
                         <Link 
                             href="/products?category=men" 
-                            className="inline-block bg-white text-primary px-8 py-4 font-black text-xs tracking-widest hover:bg-accent hover:text-white transition-all uppercase"
+                            className="inline-block bg-white text-primary px-6 py-3 font-black text-[10px] tracking-widest hover:bg-accent hover:text-white transition-all uppercase"
                         >
-                            Explore Shoes & Bags
+                            Explore Now
                         </Link>
                     </div>
                 </div>
 
                 {/* Women's Category */}
-                <div className="group relative h-[650px] overflow-hidden bg-surface shadow-md">
+                <div className="group relative h-[450px] overflow-hidden bg-surface shadow-sm rounded-sm">
                     <Image 
                         src="/images/women-cat.png" 
                         alt="Women's Shoes and Bags" 
                         fill 
-                        className="object-cover object-top transform group-hover:scale-105 transition-transform duration-1000 ease-out grayscale-[0.2] group-hover:grayscale-0"
+                        className="object-cover object-top transform group-hover:scale-105 transition-transform duration-1000 ease-out"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent opacity-80" />
-                    <div className="absolute bottom-12 left-10 text-white z-20">
-                        <p className="text-accent font-bold tracking-[0.3em] text-[10px] uppercase mb-2 block">FOR HER</p>
-                        <h3 className="text-6xl font-heading font-black tracking-tighter italic mb-6">WOMEN'S <br /> LOOKS.</h3>
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-90" />
+                    <div className="absolute bottom-8 left-8 text-white z-20">
+                        <p className="text-accent font-bold tracking-[0.3em] text-[8px] uppercase mb-1 block">FOR HER</p>
+                        <h3 className="text-4xl font-heading font-black tracking-tighter italic mb-4">WOMEN'S <br /> COLLECTION.</h3>
                         <Link 
                             href="/products?category=women" 
-                            className="inline-block bg-white text-primary px-8 py-4 font-black text-xs tracking-widest hover:bg-accent hover:text-white transition-all uppercase"
+                            className="inline-block bg-white text-primary px-6 py-3 font-black text-[10px] tracking-widest hover:bg-accent hover:text-white transition-all uppercase"
                         >
-                            Explore Shoes & Bags
+                            Explore Now
                         </Link>
                     </div>
-                </div>
-            </div>
-            
-            {/* Bag Promo Section */}
-            <div className="mt-12 bg-primary h-72 relative overflow-hidden flex items-center justify-center text-center px-6">
-                <div className="absolute inset-0 opacity-10 flex items-center justify-center">
-                    <p className="text-[15vw] font-black leading-none select-none tracking-tighter text-white">ACCESSORIES</p>
-                </div>
-                <div className="relative z-10 text-white max-w-2xl">
-                    <span className="text-accent font-bold tracking-[0.4em] text-[10px] uppercase mb-2 block">NEW ARRIVALS</span>
-                    <h3 className="text-4xl md:text-5xl font-heading font-black italic tracking-tighter uppercase mb-4 italic">The Zevens Carry Series</h3>
-                    <p className="text-white/60 mb-8 text-sm font-medium">Engineered for the modern minimalist. Premium leather construction meets ergonomic design in our new bag collection.</p>
-                    <Link href="/products?category=bags" className="inline-block border-2 border-white px-10 py-4 font-black text-xs tracking-widest hover:bg-white hover:text-primary transition-all uppercase">Browse All Bags</Link>
                 </div>
             </div>
         </div>
       </section>
 
-      {/* Newsletter Section */}
-      <section className="py-32 bg-primary text-white overflow-hidden relative border-t border-white/5">
-        <div className="absolute top-0 right-0 text-[20vw] font-black text-white/5 select-none -translate-y-1/2">
-            JOIN
+      {/* NEW SECTION: SHOES */}
+      <section className="py-20 bg-white">
+        <div className="container mx-auto px-6">
+            <div className="flex justify-between items-center mb-10 border-b border-black/5 pb-6">
+                <h2 className="text-3xl font-heading font-black italic tracking-tighter uppercase italic">SHOP <span className="text-accent">SHOES.</span></h2>
+                <Link href="/products?category=shoes" className="text-[10px] font-black tracking-[0.2em] hover:text-accent transition-colors uppercase italic underline underline-offset-4">View All Footwear</Link>
+            </div>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+                {SHOE_PRODUCTS.map((product) => (
+                    <div key={product.id} className="group cursor-pointer">
+                        <div className="aspect-square bg-surface mb-4 relative overflow-hidden group-hover:shadow-lg transition-all duration-300">
+                             <Image src={product.image} alt={product.name} fill className="object-contain p-8 transform group-hover:scale-110 transition-transform duration-500" />
+                             <div className="absolute bottom-4 left-4 bg-primary text-white text-[8px] font-black px-2 py-1 uppercase tracking-widest">{product.gender}</div>
+                        </div>
+                        <h3 className="font-heading font-bold text-xs uppercase truncate">{product.name}</h3>
+                        <p className="font-heading font-black text-sm text-accent">৳ {product.price.toLocaleString()}</p>
+                    </div>
+                ))}
+            </div>
         </div>
+      </section>
+
+      {/* NEW SECTION: BAGS */}
+      <section className="py-20 bg-background">
+        <div className="container mx-auto px-6">
+            <div className="flex justify-between items-center mb-10 border-b border-black/5 pb-6">
+                <h2 className="text-3xl font-heading font-black italic tracking-tighter uppercase italic">SHOP <span className="text-accent">BAGS.</span></h2>
+                <Link href="/products?category=bags" className="text-[10px] font-black tracking-[0.2em] hover:text-accent transition-colors uppercase italic underline underline-offset-4">View All Accessories</Link>
+            </div>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+                {BAG_PRODUCTS.map((product) => (
+                    <div key={product.id} className="group cursor-pointer">
+                        <div className="aspect-square bg-surface mb-4 relative overflow-hidden group-hover:shadow-lg transition-all duration-300">
+                             <Image src={product.image} alt={product.name} fill className="object-contain p-8 transform group-hover:scale-110 transition-transform duration-500" />
+                             <div className="absolute bottom-4 left-4 bg-primary text-white text-[8px] font-black px-2 py-1 uppercase tracking-widest">{product.gender}</div>
+                        </div>
+                        <h3 className="font-heading font-bold text-xs uppercase truncate">{product.name}</h3>
+                        <p className="font-heading font-black text-sm text-accent">৳ {product.price.toLocaleString()}</p>
+                    </div>
+                ))}
+            </div>
+        </div>
+      </section>
+
+      {/* Newsletter Section */}
+      <section className="py-24 bg-primary text-white overflow-hidden relative border-t border-white/5">
         <div className="container mx-auto px-6 relative z-10 text-center">
-            <h2 className="text-5xl md:text-8xl font-heading font-black tracking-tighter mb-8 italic italic uppercase">
+            <h2 className="text-4xl md:text-6xl font-heading font-black tracking-tighter mb-4 italic uppercase">
                 JOIN THE <span className="text-accent">CLAN.</span>
             </h2>
-            <p className="text-white/50 max-w-xl mx-auto mb-12 text-lg">
-                Be the first to know about upcoming limited edition drops and exclusive events.
+            <p className="text-white/50 max-w-xl mx-auto mb-10 text-sm italic uppercase tracking-widest">
+                Be the first to know about upcoming limited edition drops.
             </p>
-            <form className="max-w-md mx-auto flex flex-col md:flex-row gap-4">
+            <form className="max-w-md mx-auto flex flex-col md:flex-row gap-3">
                 <input 
                     type="email" 
                     placeholder="ENTER YOUR EMAIL" 
-                    className="flex-grow bg-white/5 border border-white/10 px-8 py-5 font-bold text-sm focus:outline-none focus:border-accent transition-colors text-white uppercase italic tracking-widest"
+                    className="flex-grow bg-white/5 border border-white/10 px-6 py-4 font-bold text-[10px] focus:outline-none focus:border-accent transition-colors text-white uppercase italic tracking-widest"
                 />
-                <button className="bg-white text-primary px-10 py-5 font-black text-sm tracking-tighter hover:bg-accent hover:text-white transition-all uppercase">
+                <button className="bg-white text-primary px-8 py-4 font-black text-[10px] tracking-tighter hover:bg-accent hover:text-white transition-all uppercase">
                     SUBSCRIBE
                 </button>
             </form>

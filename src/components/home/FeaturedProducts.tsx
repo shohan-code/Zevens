@@ -11,6 +11,14 @@ const FEAT_PRODUCTS = [
     tag: "Trending"
   },
   {
+    id: "b1",
+    name: "Stealth Backpack",
+    category: "Bags",
+    price: 12500,
+    image: "/images/hero.png",
+    tag: "New Arrival"
+  },
+  {
     id: "2",
     name: "Neon Velocity",
     category: "Training",
@@ -19,67 +27,73 @@ const FEAT_PRODUCTS = [
     tag: "New"
   },
   {
+    id: "b2",
+    name: "Lux Handbag Gold",
+    category: "Bags",
+    price: 28000,
+    image: "/images/prod3.png",
+    tag: "Exclusive"
+  },
+  {
     id: "3",
     name: "Urban Lux Gold",
     category: "Lifestyle",
     price: 22000,
     image: "/images/prod3.png",
-    tag: "Exclusive"
+    tag: "Classic"
   }
 ];
 
 export default function FeaturedProducts() {
   return (
-    <section className="py-24 bg-surface">
+    <section className="py-20 bg-surface">
       <div className="container mx-auto px-6">
         <div className="flex justify-between items-end mb-12">
           <div>
-            <h2 className="text-4xl font-heading font-black tracking-tighter mb-4 italic">
+            <h2 className="text-3xl font-heading font-black tracking-tighter mb-2 italic uppercase">
               FEATURED <span className="text-accent">DROPS.</span>
             </h2>
-            <p className="text-secondary max-w-md">
+            <p className="text-[10px] uppercase font-bold tracking-widest text-secondary max-w-md">
               Hand-picked selection of our most innovative and premium footwear.
             </p>
           </div>
-          <Link href="/products" className="hidden md:flex items-center space-x-2 text-sm font-bold border-b border-black hover:text-accent hover:border-accent transition-all pb-1">
+          <Link href="/products" className="hidden md:flex items-center space-x-2 text-[10px] font-black tracking-widest border-b-2 border-black hover:text-accent hover:border-accent transition-all pb-1 uppercase">
             <span>VIEW ALL</span>
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
           </Link>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 md:gap-6">
           {FEAT_PRODUCTS.map((product) => (
-            <div key={product.id} className="group relative">
-              <div className="aspect-square bg-background rounded-sm overflow-hidden relative mb-6 transition-all duration-500 group-hover:shadow-2xl group-hover:shadow-black/5">
+            <div key={product.id} className="group flex flex-col">
+              <div className="aspect-square bg-background rounded-sm overflow-hidden relative mb-4 transition-all duration-500 group-hover:shadow-xl">
                 <Image
                   src={product.image}
                   alt={product.name}
                   fill
-                  className="object-contain p-8 transform transition-transform duration-700 group-hover:scale-110"
+                  className="object-contain p-6 transform transition-transform duration-700 group-hover:scale-110"
                 />
                 
                 {product.tag && (
-                  <span className="absolute top-4 left-4 px-3 py-1 bg-primary text-white text-[10px] font-bold uppercase tracking-widest leading-none">
+                  <span className="absolute top-3 left-3 px-2 py-0.5 bg-primary text-white text-[8px] font-black uppercase tracking-widest leading-none">
                     {product.tag}
                   </span>
                 )}
                 
-                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center translate-y-4 group-hover:translate-y-0 transform">
+                <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center translate-y-2 group-hover:translate-y-0 transform">
                   <Link 
                     href={`/products/${product.id}`}
-                    className="bg-white text-primary px-6 py-3 font-bold text-sm tracking-tighter hover:bg-accent hover:text-white transition-colors uppercase"
+                    className="bg-white text-primary px-4 py-2 font-black text-[10px] tracking-tighter hover:bg-accent hover:text-white transition-colors uppercase"
                   >
                     Quick View
                   </Link>
                 </div>
               </div>
               
-              <div className="space-y-1">
-                <p className="text-[10px] text-accent font-bold uppercase tracking-widest">{product.category}</p>
-                <div className="flex justify-between items-start">
-                  <h3 className="font-heading font-bold text-xl group-hover:text-accent transition-colors">{product.name}</h3>
-                  <p className="font-heading font-black text-lg">৳ {product.price.toLocaleString()}</p>
-                </div>
+              <div className="space-y-0.5">
+                <p className="text-[8px] text-accent font-black uppercase tracking-[0.2em]">{product.category}</p>
+                <h3 className="font-heading font-bold text-xs group-hover:text-accent transition-colors leading-tight uppercase truncate">{product.name}</h3>
+                <p className="font-heading font-black text-sm text-primary">৳ {product.price.toLocaleString()}</p>
               </div>
             </div>
           ))}
