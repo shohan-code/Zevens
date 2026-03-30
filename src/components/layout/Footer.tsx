@@ -25,37 +25,36 @@ export default function Footer() {
           </div>
 
           <div>
-            <h4 className="font-heading font-bold text-sm uppercase tracking-widest mb-6">Support</h4>
-            <ul className="space-y-4 text-sm text-secondary">
-              <li><Link href="/contact" className="hover:text-primary transition-colors">Contact Us</Link></li>
-              <li><Link href="/shipping" className="hover:text-primary transition-colors">Shipping Info</Link></li>
-              <li><Link href="/returns" className="hover:text-primary transition-colors">Returns</Link></li>
-              <li><Link href="/faq" className="hover:text-primary transition-colors">FAQ</Link></li>
+            <h4 className="font-heading font-bold text-[10px] uppercase tracking-widest mb-6">Support</h4>
+            <ul className="space-y-4 text-[10px] font-bold text-secondary uppercase tracking-widest">
+              <li><Link href="/about" className="hover:text-accent transition-colors">About Us</Link></li>
+              <li><a href="mailto:zevens@contact.com" className="hover:text-accent transition-colors">zevens@contact.com</a></li>
+              <li><a href="https://wa.me/8801772024655" target="_blank" className="hover:text-accent transition-colors">WhatsApp: 01772024655</a></li>
+              <li><Link href="/privacy" className="hover:text-accent transition-colors">Privacy Policy</Link></li>
             </ul>
           </div>
 
           <div>
-            <h4 className="font-heading font-bold text-sm uppercase tracking-widest mb-6">Newsletter</h4>
-            <p className="text-secondary text-sm mb-4">Stay updated with latest releases.</p>
-            <form className="flex space-x-2">
+            <h4 className="font-heading font-bold text-[10px] uppercase tracking-widest mb-6">Newsletter</h4>
+            <p className="text-secondary text-[10px] mb-4 uppercase font-bold tracking-widest">Stay updated with latest releases.</p>
+            <form className="flex flex-col space-y-2">
               <input 
                 type="email" 
-                placeholder="Email address" 
-                className="bg-background border border-black/5 px-4 py-2 text-sm w-full focus:outline-none focus:border-accent transition-colors"
+                placeholder="EMAIL ADDRESS" 
+                className="bg-background border border-black/10 px-4 py-3 text-[10px] w-full focus:outline-none focus:border-accent transition-colors font-bold tracking-widest"
                 required
               />
-              <button className="bg-primary text-white px-4 py-2 text-sm font-bold hover:bg-accent transition-colors uppercase tracking-tight">
-                Join
+              <button className="bg-primary text-white px-4 py-3 text-[10px] font-black hover:bg-accent transition-colors uppercase tracking-widest italic">
+                SUBSCRIBE
               </button>
             </form>
           </div>
         </div>
 
-        <div className="border-t border-black/5 pt-8 flex flex-col md:row justify-between items-center text-xs text-secondary space-y-4 md:space-y-0">
-          <p>© {new Date().getFullYear()} Zevens. All rights reserved.</p>
+        <div className="border-t border-black/5 pt-8 flex flex-col md:flex-row justify-between items-center text-[8px] font-black uppercase tracking-widest text-secondary space-y-4 md:space-y-0">
+          <p>© {new Date().getFullYear()} ZEVENS. DESIGNED FOR THE FUTURE.</p>
           <div className="flex space-x-6">
-            <Link href="/privacy" className="hover:text-primary">Privacy Policy</Link>
-            <Link href="/terms" className="hover:text-primary">Terms of Service</Link>
+            <Link href="/terms" className="hover:text-accent transition-colors">Terms of Service</Link>
           </div>
         </div>
       </div>

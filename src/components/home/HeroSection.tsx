@@ -22,15 +22,9 @@ export default function HeroSection() {
           <div className="flex flex-wrap gap-4">
             <Link 
               href="/products" 
-              className="px-8 py-4 bg-primary text-white font-bold rounded-sm hover:bg-accent transition-all duration-300 uppercase tracking-tighter"
+              className="px-10 py-5 bg-primary text-white font-black rounded-sm hover:bg-accent transition-all duration-300 uppercase tracking-tighter italic"
             >
-              Shop Collection
-            </Link>
-            <Link 
-              href="/about" 
-              className="px-8 py-4 border border-black/10 font-bold rounded-sm hover:bg-black/5 transition-all duration-300 uppercase tracking-tighter"
-            >
-              Learn More
+              ALL COLLECTION
             </Link>
           </div>
         </div>
