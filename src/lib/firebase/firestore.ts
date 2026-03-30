@@ -43,3 +43,39 @@ export const addProduct = async (product: Omit<Product, "id">): Promise<string> 
   });
   return docRef.id;
 };
+
+// Order Types
+export interface OrderItem {
+  productId: string;
+  name: string;
+  price: number;
+  quantity: number;
+}
+
+export interface CustomerDetails {
+  name: string;
+  email: string;
+  phone: string;
+  address: string;
+}
+
+export interface Order {
+  id?: string;
+  customerDetails: CustomerDetails;
+  items: OrderItem[];
+  totalAmount: number;
+  status: 'pending' | 'confirmed' | 'shipped' | 'delivered';
+  createdAt?: string;
+}
+
+const ORDERS_COLLECTION = "orders";
+
+export const createOrder = async (order: Omit<Order, "id">): Promise<string> => {
+  const ordersCol = collection(db, ORDERS_COLLECTION);
+  const docRef = await addDoc(ordersCol, {
+    ...order,
+    status: order.status || 'pending',
+    createdAt: new Date().toISOString()
+  });
+  return docRef.id;
+};
