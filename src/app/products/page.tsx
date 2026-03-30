@@ -1,14 +1,14 @@
 import Image from "next/image";
 import Link from "next/link";
 
-// Updated Mock data with Bags and Pre-order status
+// Updated Mock data - Using clean product images as placeholders for bags
 const ALL_PRODUCTS = [
   {
     id: "1",
     name: "Aether Blue Edition",
     category: "Running",
     price: 18500,
-    image: "/images/prod1.png",
+    image: "/images/prod1.png", 
     tag: "Trending",
     status: "in-stock"
   },
@@ -17,7 +17,7 @@ const ALL_PRODUCTS = [
     name: "Urban Stealth Backpack",
     category: "Bags",
     price: 12500,
-    image: "/images/men-cat.png", // Using cat image as placeholder
+    image: "/images/hero.png", // Using a shoe image as placeholder (clean BG)
     tag: "New Arrival",
     status: "in-stock"
   },
@@ -35,7 +35,7 @@ const ALL_PRODUCTS = [
     name: "Lux Handbag Gold",
     category: "Bags",
     price: 28000,
-    image: "/images/women-cat.png", // Using cat image as placeholder
+    image: "/images/prod3.png", // Using a shoe image as placeholder (clean BG)
     tag: "Exclusive",
     status: "in-stock"
   },
