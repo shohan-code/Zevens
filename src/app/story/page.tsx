@@ -14,10 +14,10 @@ export default function StoryPage() {
           />
         </div>
         <div className="container mx-auto px-6 relative z-10 text-center">
-            <h1 className="text-5xl md:text-7xl font-heading font-black italic tracking-tighter uppercase mb-4">
+            <h1 className="text-4xl md:text-7xl font-heading font-black italic tracking-tighter uppercase mb-4">
                 OUR <span className="text-accent">STORY.</span>
             </h1>
-            <p className="text-white/60 max-w-2xl mx-auto text-[10px] uppercase tracking-[0.4em] font-black italic">
+            <p className="text-white/60 max-w-2xl mx-auto text-[8px] md:text-[10px] uppercase tracking-[0.4em] font-black italic">
                 Redefining the walk for the modern minimalist.
             </p>
         </div>

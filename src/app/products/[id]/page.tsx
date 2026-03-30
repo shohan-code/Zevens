@@ -76,19 +76,19 @@ export default function ProductDetailPage() {
 
             {/* Product Info */}
             <div className="space-y-8">
-                <div className="space-y-2">
+                <div className="space-y-4">
                     <div className="flex items-center space-x-3">
                         <p className="text-secondary font-bold text-xs uppercase tracking-[0.3em]">
                             {product.category}
                         </p>
                         {product.status === "pre-order" && (
-                            <span className="bg-accent/10 text-accent px-2 py-0.5 text-[9px] font-black uppercase tracking-tighter">Limited Release</span>
+                            <span className="bg-accent/10 text-accent px-2 py-0.5 text-[10px] font-black uppercase tracking-widest leading-none">Limited Release</span>
                         )}
                     </div>
-                    <h1 className="text-5xl font-heading font-black italic tracking-tighter uppercase">
+                    <h1 className="text-4xl md:text-5xl font-heading font-black italic tracking-tighter uppercase leading-none">
                         {product.name}
                     </h1>
-                    <p className="text-3xl font-heading font-black text-accent mt-2">
+                    <p className="text-2xl md:text-3xl font-heading font-black text-accent">
                         ৳ {product.price.toLocaleString()}
                     </p>
                 </div>

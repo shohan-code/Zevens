@@ -93,14 +93,14 @@ function CheckoutContent() {
   return (
     <div className="bg-background min-h-screen py-16">
       <div className="container mx-auto px-6">
-        <header className="mb-12">
-            <h1 className="text-5xl font-heading font-black italic tracking-tighter uppercase italic">
+        <header className="mb-10">
+            <h1 className="text-3xl md:text-5xl font-heading font-black italic tracking-tighter uppercase italic">
                 Secure <span className="text-accent">Checkout.</span>
             </h1>
-            <p className="text-secondary">Complete your order details below.</p>
+            <p className="text-secondary text-xs uppercase font-bold tracking-widest mt-2">Complete your order details below.</p>
         </header>
 
-        <form onSubmit={handleSubmit} className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
+        <form onSubmit={handleSubmit} className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-start">
             <div className="space-y-10">
                 {/* Section 01: Contact Information */}
                 <div className="bg-surface p-8 rounded-sm shadow-sm space-y-6 border-t-2 border-accent/20">

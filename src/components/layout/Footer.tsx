@@ -4,8 +4,8 @@ export default function Footer() {
   return (
     <footer className="bg-surface border-t border-black/5 pt-16 pb-8">
       <div className="container mx-auto px-6">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
-          <div className="col-span-1 md:col-span-1">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-12 mb-16">
+          <div className="col-span-2 md:col-span-1">
             <Link href="/" className="text-2xl font-heading font-black tracking-tighter mb-4 block">
               ZEVENS<span className="text-accent">.</span>
             </Link>

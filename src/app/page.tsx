@@ -105,8 +105,8 @@ export default function Home() {
       {/* NEW SECTION: SHOES */}
       <section className="py-20 bg-white">
         <div className="container mx-auto px-6">
-            <div className="flex justify-between items-center mb-10 border-b border-black/5 pb-6">
-                <h2 className="text-3xl font-heading font-black italic tracking-tighter uppercase italic">SHOP <span className="text-accent">SHOES.</span></h2>
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-10 border-b border-black/5 pb-6 gap-4">
+                <h2 className="text-2xl md:text-3xl font-heading font-black italic tracking-tighter uppercase italic">SHOP <span className="text-accent">SHOES.</span></h2>
                 <Link href="/products?category=shoes" className="text-[10px] font-black tracking-[0.2em] hover:text-accent transition-colors uppercase italic underline underline-offset-4">View All Footwear</Link>
             </div>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
@@ -127,8 +127,8 @@ export default function Home() {
       {/* NEW SECTION: BAGS */}
       <section className="py-20 bg-background">
         <div className="container mx-auto px-6">
-            <div className="flex justify-between items-center mb-10 border-b border-black/5 pb-6">
-                <h2 className="text-3xl font-heading font-black italic tracking-tighter uppercase italic">SHOP <span className="text-accent">BAGS.</span></h2>
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-10 border-b border-black/5 pb-6 gap-4">
+                <h2 className="text-2xl md:text-3xl font-heading font-black italic tracking-tighter uppercase italic">SHOP <span className="text-accent">BAGS.</span></h2>
                 <Link href="/products?category=bags" className="text-[10px] font-black tracking-[0.2em] hover:text-accent transition-colors uppercase italic underline underline-offset-4">View All Accessories</Link>
             </div>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6">

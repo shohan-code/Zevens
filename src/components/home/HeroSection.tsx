@@ -12,17 +12,17 @@ export default function HeroSection() {
           <span className="inline-block px-4 py-1.5 bg-accent/10 text-accent text-xs font-bold tracking-widest uppercase rounded-full mb-6">
             New Collection 2026
           </span>
-          <h1 className="text-6xl md:text-8xl font-heading font-black leading-none tracking-tighter mb-8 italic">
+          <h1 className="text-5xl md:text-8xl font-heading font-black leading-none tracking-tighter mb-8 italic">
             STEP INTO <br />
             <span className="text-gradient">THE FUTURE.</span>
           </h1>
-          <p className="text-secondary text-lg md:text-xl mb-10 max-w-lg leading-relaxed">
+          <p className="text-secondary text-base md:text-xl mb-10 max-w-lg leading-relaxed">
             Experience unparalleled comfort and futuristic design. The new Zevens Aether series is here to redefine your walk.
           </p>
-          <div className="flex flex-wrap gap-4">
+          <div className="flex flex-col sm:flex-row gap-4">
             <Link 
               href="/products" 
-              className="px-10 py-5 bg-primary text-white font-black rounded-sm hover:bg-accent transition-all duration-300 uppercase tracking-tighter italic"
+              className="px-10 py-5 bg-primary text-white text-center font-black rounded-sm hover:bg-accent transition-all duration-300 uppercase tracking-tighter italic"
             >
               ALL COLLECTION
             </Link>

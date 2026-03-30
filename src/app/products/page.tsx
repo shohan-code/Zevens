@@ -83,19 +83,19 @@ function ProductsContent() {
   return (
     <div className="bg-background min-h-screen py-16">
       <div className="container mx-auto px-6">
-        <header className="mb-12">
-            <h1 className="text-5xl font-heading font-black italic tracking-tighter mb-4 uppercase">
+        <header className="mb-10">
+            <h1 className="text-3xl md:text-5xl font-heading font-black italic tracking-tighter mb-4 uppercase">
                 {categoryFilter ? `${categoryFilter}'s` : "Product"} <span className="text-accent">Catalog.</span>
             </h1>
-            <p className="text-secondary">Discover our wide range of premium footwear and bags.</p>
+            <p className="text-secondary text-[10px] uppercase font-bold tracking-widest mt-2">Discover our wide range of premium footwear and bags.</p>
         </header>
 
         <div className="flex flex-col lg:flex-row gap-12">
             {/* Filter Sidebar */}
-            <aside className="w-full lg:w-64 space-y-8">
+            <aside className="w-full lg:w-64 space-y-8 order-2 lg:order-1">
                 <div>
                     <h3 className="font-heading font-bold text-sm uppercase tracking-widest mb-4">Categories</h3>
-                    <div className="space-y-2">
+                    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-1 gap-4 lg:space-y-2">
                         {["All", "Running", "Training", "Lifestyle", "Bags"].map(cat => (
                            <Link 
                                 key={cat} 
@@ -103,32 +103,18 @@ function ProductsContent() {
                                 className={`flex items-center space-x-3 group ${categoryFilter === cat.toLowerCase() ? 'text-accent' : 'text-secondary'}`}
                             >
                                 <div className={`w-4 h-4 border rounded-sm transition-colors ${categoryFilter === cat.toLowerCase() ? 'border-accent bg-accent' : 'border-black/10 group-hover:border-accent'}`} />
-                                <span className="text-sm group-hover:text-primary transition-colors">{cat}</span>
+                                <span className="text-[10px] font-bold uppercase tracking-widest group-hover:text-primary transition-colors">{cat}</span>
                            </Link>
                         ))}
                     </div>
                 </div>
-                <div>
-                    <h3 className="font-heading font-bold text-sm uppercase tracking-widest mb-4">Shop by Gender</h3>
-                    <div className="space-y-2">
-                        {["Men", "Women"].map(gender => (
-                           <Link 
-                                key={gender} 
-                                href={`/products?category=${gender.toLowerCase()}`}
-                                className={`flex items-center space-x-3 group ${categoryFilter === gender.toLowerCase() ? 'text-accent' : 'text-secondary'}`}
-                            >
-                                <div className={`w-4 h-4 border rounded-sm transition-colors ${categoryFilter === gender.toLowerCase() ? 'border-accent bg-accent' : 'border-black/10 group-hover:border-accent'}`} />
-                                <span className="text-sm group-hover:text-primary transition-colors">{gender}'s Collection</span>
-                           </Link>
-                        ))}
-                    </div>
-                </div>
+                {/* Gender Filter removed for space on mobile, or can be added back if needed */}
             </aside>
 
             {/* Product Grid */}
-            <div className="flex-grow">
+            <div className="flex-grow order-1 lg:order-2">
                 {filteredProducts.length > 0 ? (
-                    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+                    <div className="grid grid-cols-2 xl:grid-cols-3 gap-4 md:gap-8">
                         {filteredProducts.map((product) => (
                             <div key={product.id} className="group flex flex-col">
                                 <div className="aspect-square bg-surface rounded-sm overflow-hidden relative mb-4 transition-all duration-500 group-hover:shadow-xl">
