@@ -83,27 +83,33 @@ function CheckoutContent() {
         <form onSubmit={handleSubmit} className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
             {/* Customer Details */}
             <div className="space-y-10">
-                <div className="bg-surface p-8 rounded-sm shadow-sm space-y-6">
-                    <h3 className="font-heading font-bold text-sm tracking-widest uppercase border-l-4 border-accent pl-4 text-accent">Contact Information</h3>
+                <div className="bg-surface p-8 rounded-sm shadow-sm space-y-6 border-t-2 border-accent/20">
+                    <div className="flex items-center space-x-4 mb-4">
+                        <div className="w-8 h-8 bg-accent text-white rounded-full flex items-center justify-center font-black text-xs italic">01</div>
+                        <h3 className="font-heading font-bold text-sm tracking-widest uppercase text-accent">Contact Information</h3>
+                    </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div className="space-y-2">
-                             <label className="text-[10px] font-black uppercase tracking-widest text-secondary">Full Name</label>
-                             <input required type="text" className="w-full bg-background border border-black/10 px-4 py-3 text-sm focus:outline-none focus:border-accent transition-colors" placeholder="John Doe" />
+                             <label className="text-[10px] font-black uppercase tracking-widest text-accent/80">Full Name</label>
+                             <input required type="text" className="w-full bg-background border border-black/10 px-4 py-3 text-sm focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent/20 transition-all font-medium" placeholder="John Doe" />
                         </div>
                         <div className="space-y-2">
-                             <label className="text-[10px] font-black uppercase tracking-widest text-secondary">Phone Number</label>
-                             <input required type="tel" className="w-full bg-background border border-black/10 px-4 py-3 text-sm focus:outline-none focus:border-accent transition-colors" placeholder="01XXXXXXXXX" />
+                             <label className="text-[10px] font-black uppercase tracking-widest text-accent/80">Phone Number</label>
+                             <input required type="tel" className="w-full bg-background border border-black/10 px-4 py-3 text-sm focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent/20 transition-all font-medium" placeholder="01XXXXXXXXX" />
                         </div>
                     </div>
                     <div className="space-y-2">
-                            <label className="text-[10px] font-black uppercase tracking-widest text-secondary">Full Delivery Address</label>
-                            <textarea required rows={3} className="w-full bg-background border border-black/10 px-4 py-3 text-sm focus:outline-none focus:border-accent transition-colors" placeholder="House no, Street name, City, Area"></textarea>
+                            <label className="text-[10px] font-black uppercase tracking-widest text-accent/80">Full Delivery Address</label>
+                            <textarea required rows={3} className="w-full bg-background border border-black/10 px-4 py-3 text-sm focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent/20 transition-all font-medium" placeholder="House no, Street name, City, Area"></textarea>
                     </div>
                 </div>
 
                 {/* Payment Selection */}
-                <div className="bg-surface p-8 rounded-sm shadow-sm space-y-8">
-                    <h3 className="font-heading font-bold text-sm tracking-widest uppercase border-l-4 border-accent pl-4 text-accent">Payment Selection</h3>
+                <div className="bg-surface p-8 rounded-sm shadow-sm space-y-8 border-t-2 border-accent/20">
+                    <div className="flex items-center space-x-4 mb-4">
+                        <div className="w-8 h-8 bg-accent text-white rounded-full flex items-center justify-center font-black text-xs italic">02</div>
+                        <h3 className="font-heading font-bold text-sm tracking-widest uppercase text-accent">Payment Selection</h3>
+                    </div>
                     
                     <div className="space-y-4">
                         <label className={`block p-4 border-2 rounded-sm cursor-pointer transition-all ${paymentMethod === 'cod' ? 'border-accent bg-accent/5' : 'border-black/5'}`}>
