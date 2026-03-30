@@ -229,7 +229,9 @@ function CheckoutContent() {
                         </div>
                         
                         <div className="flex justify-between text-xl font-heading font-black pt-4 border-t border-black/10 italic">
-                            <span>DUE NOW (PAY ADVANCE)</span>
+                            <span className="uppercase">
+                                {isPreOrder || paymentMethod === "cod" ? "DUE NOW (PAY ADVANCE)" : "TOTAL PAYABLE"}
+                            </span>
                             <span className="text-accent underline decoration-2 underline-offset-4">৳ {totals.dueNow.toLocaleString()}</span>
                         </div>
 
