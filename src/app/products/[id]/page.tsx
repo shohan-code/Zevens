@@ -127,9 +127,17 @@ export default function ProductDetailPage() {
                 </div>
 
                 <div className="pt-8 space-y-4">
-                    <button className={`w-full py-5 text-white font-black uppercase tracking-tighter transition-all duration-300 transform active:scale-[0.98] ${product.status === 'pre-order' ? 'bg-accent hover:bg-black' : 'bg-primary hover:bg-accent'}`}>
-                        {product.status === 'pre-order' ? 'Pre-order Now' : 'Add to Cart'}
-                    </button>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <button className="w-full py-5 border-2 border-primary text-primary font-black uppercase tracking-tighter hover:bg-black/5 transition-all duration-300">
+                            Add to Cart
+                        </button>
+                        <button 
+                            onClick={() => window.location.href = `/checkout?productId=${product.id}&action=buy-now`}
+                            className={`w-full py-5 text-white font-black uppercase tracking-tighter transition-all duration-300 transform active:scale-[0.98] ${product.status === 'pre-order' ? 'bg-accent hover:bg-black' : 'bg-primary hover:bg-accent'}`}
+                        >
+                            {product.status === 'pre-order' ? 'Pre-order Now' : 'Buy It Now'}
+                        </button>
+                    </div>
                     
                     <div className="flex flex-col gap-3 py-6 border-y border-black/5">
                          {product.status === 'in-stock' ? (

@@ -26,11 +26,14 @@ export default function Navbar() {
         </Link>
 
         <div className="hidden md:flex items-center space-x-8 text-sm font-medium">
-          <Link href="/products" className="hover:text-accent transition-colors">
-            SHOP
+          <Link href="/" className="hover:text-accent transition-colors">
+            HOME
           </Link>
-          <Link href="/categories" className="hover:text-accent transition-colors">
-            CATEGORIES
+          <Link href="/products?category=men" className="hover:text-accent transition-colors uppercase">
+            MEN'S
+          </Link>
+          <Link href="/products?category=women" className="hover:text-accent transition-colors uppercase">
+            WOMEN'S
           </Link>
           <Link href="/about" className="hover:text-accent transition-colors">
             ABOUT
