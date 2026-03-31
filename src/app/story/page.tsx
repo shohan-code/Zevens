@@ -1,3 +1,5 @@
+'use client';
+
 import Image from "next/image";
 import { useState, useEffect } from "react";
 import { getSiteSettings, SiteSettings } from "@/lib/firebase/firestore";
