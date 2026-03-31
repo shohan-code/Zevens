@@ -17,8 +17,7 @@ export const metadata: Metadata = {
   description: "Experience the future of footwear with Zevens. Shop the latest flagship premium shoes.",
 };
 
-import Navbar from "@/components/layout/Navbar";
-import Footer from "@/components/layout/Footer";
+import ClientLayoutWrapper from "@/components/layout/ClientLayoutWrapper";
 
 export default function RootLayout({
   children,
@@ -31,11 +30,9 @@ export default function RootLayout({
       className={`${outfit.variable} ${inter.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col font-sans">
-        <Navbar />
-        <main className="flex-grow pt-20">
+        <ClientLayoutWrapper>
           {children}
-        </main>
-        <Footer />
+        </ClientLayoutWrapper>
       </body>
     </html>
   );

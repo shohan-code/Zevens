@@ -1,44 +1,51 @@
-"use client";
-
-import { useState, Suspense, useMemo } from "react";
+import { useState, Suspense, useMemo, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-
-// Updated Mock data with Pre-order Advance Amount
-const PRODUCTS = [
-  { id: "1", name: "Aether Blue Edition", category: "Running", price: 18500, image: "/images/prod1.png", status: "in-stock" },
-  { id: "2", name: "Neon Velocity", category: "Training", price: 14200, image: "/images/prod2.png", status: "pre-order", preOrderAdvance: 2000 },
-  { id: "b1", name: "Urban Stealth Backpack", category: "Bags", price: 12500, image: "/images/hero.png", status: "in-stock" },
-  { id: "b2", name: "Lux Handbag Gold", category: "Bags", price: 28000, image: "/images/prod3.png", status: "in-stock" },
-  { id: "3", name: "Urban Lux Gold", category: "Lifestyle", price: 22000, image: "/images/prod3.png", status: "in-stock" },
-  { id: "4", name: "Stealth Runner", category: "Training", price: 15500, image: "/images/prod2.png", status: "pre-order", preOrderAdvance: 1500 }
-];
+import { getProducts, getSiteSettings, createOrder, Product, SiteSettings, Order } from "@/lib/firebase/firestore";
 
 function CheckoutContent() {
   const searchParams = useSearchParams();
   const productId = searchParams.get("productId");
   
+  const [products, setProducts] = useState<Product[]>([]);
+  const [siteSettings, setSiteSettings] = useState<SiteSettings | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState<"full" | "cod">("cod");
   
-  // Payment Verification Fields
+  const [customerInfo, setCustomerInfo] = useState({
+    name: "",
+    phone: "",
+    address: ""
+  });
   const [transId, setTransId] = useState("");
   const [payNumber, setPayNumber] = useState("");
 
-  const selectedProduct = productId ? PRODUCTS.find(p => p.id === productId) : PRODUCTS[0];
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    try {
+        const [prodData, settingsData] = await Promise.all([getProducts(), getSiteSettings()]);
+        setProducts(prodData);
+        setSiteSettings(settingsData);
+    } catch (error) {
+        console.error("Error fetching data:", error);
+    }
+  };
+
+  const selectedProduct = productId ? products.find(p => p.id === productId) : products[0];
   const itemPrice = selectedProduct?.price || 0;
   const isPreOrder = selectedProduct?.status === "pre-order";
   const deliveryCharge = 150;
 
-  // Logic for Payment Totals
   const totals = useMemo(() => {
     let dueNow = 0;
     let dueLater = 0;
 
     if (isPreOrder) {
-        // Pre-orders always require the advance amount + delivery charge
         const advance = selectedProduct?.preOrderAdvance || 1000;
         dueNow = advance + deliveryCharge;
         dueLater = itemPrice - advance;
@@ -57,11 +64,34 @@ function CheckoutContent() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!selectedProduct) return;
+    
     setIsSubmitting(true);
-    setTimeout(() => {
-      setIsSubmitting(false);
-      setIsSuccess(true);
-    }, 2000);
+    try {
+        const orderData: Omit<Order, "id"> = {
+            customerDetails: {
+                ...customerInfo,
+                email: "" // Optional for now
+            },
+            items: [{
+                productId: selectedProduct.id!,
+                name: selectedProduct.name,
+                price: selectedProduct.price,
+                quantity: 1
+            }],
+            totalAmount: itemPrice + deliveryCharge,
+            paymentMethod,
+            transId,
+            payNumber,
+            status: "pending"
+        };
+        await createOrder(orderData);
+        setIsSuccess(true);
+    } catch (error) {
+        console.error("Error creating order:", error);
+        alert("Failed to place order. Try again.");
+    }
+    setIsSubmitting(false);
   };
 
   if (isSuccess) {
@@ -111,16 +141,16 @@ function CheckoutContent() {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div className="space-y-2">
                              <label className="text-[10px] font-black uppercase tracking-widest text-accent/80">Full Name</label>
-                             <input required type="text" className="w-full bg-background border border-black/10 px-4 py-3 text-sm focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent/20 transition-all font-medium" placeholder="John Doe" />
+                             <input required type="text" value={customerInfo.name} onChange={(e) => setCustomerInfo({...customerInfo, name: e.target.value})} className="w-full bg-background border border-black/10 px-4 py-3 text-sm focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent/20 transition-all font-medium" placeholder="John Doe" />
                         </div>
                         <div className="space-y-2">
                              <label className="text-[10px] font-black uppercase tracking-widest text-accent/80">Phone Number</label>
-                             <input required type="tel" className="w-full bg-background border border-black/10 px-4 py-3 text-sm focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent/20 transition-all font-medium" placeholder="01XXXXXXXXX" />
+                             <input required type="tel" value={customerInfo.phone} onChange={(e) => setCustomerInfo({...customerInfo, phone: e.target.value})} className="w-full bg-background border border-black/10 px-4 py-3 text-sm focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent/20 transition-all font-medium" placeholder="01XXXXXXXXX" />
                         </div>
                     </div>
                     <div className="space-y-2">
                             <label className="text-[10px] font-black uppercase tracking-widest text-accent/80">Full Delivery Address</label>
-                            <textarea required rows={3} className="w-full bg-background border border-black/10 px-4 py-3 text-sm focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent/20 transition-all font-medium" placeholder="House no, Street name, City, Area"></textarea>
+                            <textarea required rows={3} value={customerInfo.address} onChange={(e) => setCustomerInfo({...customerInfo, address: e.target.value})} className="w-full bg-background border border-black/10 px-4 py-3 text-sm focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent/20 transition-all font-medium" placeholder="House no, Street name, City, Area"></textarea>
                     </div>
                 </div>
 
@@ -177,11 +207,11 @@ function CheckoutContent() {
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="bg-white/10 p-3 rounded-sm border border-white/10">
                                     <p className="text-[8px] font-bold uppercase tracking-widest opacity-60">BKash (Personal)</p>
-                                    <p className="text-sm font-black tracking-widest">01700-000000</p>
+                                    <p className="text-sm font-black tracking-widest">{siteSettings?.bkash || '01772024655'}</p>
                                 </div>
                                 <div className="bg-white/10 p-3 rounded-sm border border-white/10">
                                     <p className="text-[8px] font-bold uppercase tracking-widest opacity-60">Nagad (Personal)</p>
-                                    <p className="text-sm font-black tracking-widest">01800-000000</p>
+                                    <p className="text-sm font-black tracking-widest">{siteSettings?.nagad || '01772024655'}</p>
                                 </div>
                             </div>
                         </div>
@@ -208,7 +238,7 @@ function CheckoutContent() {
                     <div className="space-y-4">
                         <div className="flex gap-4">
                             <div className="w-20 h-20 bg-background rounded-sm relative flex-shrink-0 p-2">
-                                <Image src={selectedProduct?.image || "/images/prod1.png"} alt="Product" fill className="object-contain" />
+                                <Image src={selectedProduct?.imageUrl || "/images/prod1.png"} alt="Product" fill className="object-contain" />
                             </div>
                             <div className="flex-grow py-1">
                                 <h4 className="font-bold text-sm leading-tight uppercase tracking-tight">{selectedProduct?.name}</h4>

@@ -1,6 +1,23 @@
 import Image from "next/image";
+import { useState, useEffect } from "react";
+import { getSiteSettings, SiteSettings } from "@/lib/firebase/firestore";
 
 export default function StoryPage() {
+  const [settings, setSettings] = useState<SiteSettings | null>(null);
+
+  useEffect(() => {
+    fetchSettings();
+  }, []);
+
+  const fetchSettings = async () => {
+    try {
+      const data = await getSiteSettings();
+      setSettings(data);
+    } catch (error) {
+      console.error("Error fetching settings:", error);
+    }
+  };
+
   return (
     <div className="bg-background min-h-screen">
       {/* Hero Section */}
@@ -74,8 +91,8 @@ export default function StoryPage() {
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
                     </div>
                     <h3 className="font-heading font-black italic uppercase tracking-tighter mb-2 text-xl italic">Email Support</h3>
-                    <p className="text-[10px] text-secondary mb-8 font-black tracking-widest uppercase italic">zevens@contact.com</p>
-                    <a href="mailto:zevens@contact.com" className="inline-block px-12 py-4 bg-primary text-white font-black text-[10px] tracking-widest hover:bg-accent transition-all uppercase italic">Send Message Now</a>
+                    <p className="text-[10px] text-secondary mb-8 font-black tracking-widest uppercase italic">{settings?.email || 'zevens@contact.com'}</p>
+                    <a href={`mailto:${settings?.email || 'zevens@contact.com'}`} className="inline-block px-12 py-4 bg-primary text-white font-black text-[10px] tracking-widest hover:bg-accent transition-all uppercase italic">Send Message Now</a>
                 </div>
 
                 {/* WhatsApp Card */}
@@ -86,7 +103,7 @@ export default function StoryPage() {
                     <h3 className="font-heading font-black italic uppercase tracking-tighter mb-2 text-xl italic">WhatsApp</h3>
                     <p className="text-[10px] text-secondary mb-8 font-black tracking-widest uppercase italic">Chat with our official support</p>
                     <a 
-                      href="https://wa.me/8801772024655" 
+                      href={`https://wa.me/${settings?.whatsapp || '8801772024655'}`}
                       target="_blank" 
                       className="inline-block px-12 py-4 bg-green-600 text-white font-black text-[10px] tracking-widest hover:bg-green-700 transition-all uppercase italic"
                     >
