@@ -17,6 +17,10 @@ export async function POST(request: Request) {
       items,
       totalAmount,
       status: 'pending',
+      paymentMethod: body.paymentMethod || 'cod',
+      transId: body.transId || '',
+      payNumber: body.payNumber || '',
+      createdAt: new Date().toISOString(),
     };
     
     // Save to Firestore and get generated Order ID
