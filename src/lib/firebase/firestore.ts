@@ -2,6 +2,12 @@ import { collection, getDocs, addDoc, doc, getDoc, updateDoc, deleteDoc, query, 
 import { db } from "./config";
 
 // Types
+export interface ProductVariant {
+  type: 'size' | 'color';
+  value: string;
+  stock: number;
+}
+
 export interface Product {
   id?: string;
   name: string;
@@ -10,6 +16,7 @@ export interface Product {
   imageUrl: string;
   category: string;
   status: 'in-stock' | 'pre-order';
+  variants?: ProductVariant[];
   preOrderAdvance?: number;
   createdAt?: string;
 }

@@ -9,6 +9,8 @@ export default function AdminOrdersPage() {
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filterStatus, setFilterStatus] = useState<Order['status'] | 'all'>("all");
 
   useEffect(() => {
     fetchOrders();
@@ -60,6 +62,33 @@ export default function AdminOrdersPage() {
         </button>
       </div>
 
+      {/* Filters & Search */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div className="md:col-span-2 relative">
+              <input 
+                type="text" 
+                placeholder="Search by ID, Name or Phone..." 
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full bg-surface border border-black/5 px-12 py-4 text-[10px] font-black uppercase tracking-widest focus:outline-none focus:border-accent shadow-sm"
+              />
+              <div className="absolute left-4 top-1/2 -translate-y-1/2 opacity-30">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+              </div>
+          </div>
+          <div className="md:col-span-2 flex overflow-x-auto pb-2 md:pb-0 space-x-2">
+              {['all', 'pending', 'confirmed', 'shipped', 'delivered', 'cancelled'].map((s) => (
+                  <button 
+                    key={s}
+                    onClick={() => setFilterStatus(s as any)}
+                    className={`px-4 py-2 text-[8px] font-black uppercase tracking-tighter whitespace-nowrap border transition-all rounded-sm ${filterStatus === s ? 'bg-accent text-white border-accent shadow-lg shadow-accent/20' : 'bg-surface text-secondary border-black/5 hover:border-black/20'}`}
+                  >
+                      {s}
+                  </button>
+              ))}
+          </div>
+      </div>
+
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
         {/* Order List Table */}
         <div className="xl:col-span-2 bg-surface rounded-sm shadow-sm overflow-hidden border border-black/5">
@@ -76,7 +105,14 @@ export default function AdminOrdersPage() {
                         </tr>
                     </thead>
                     <tbody className="divide-y divide-black/5">
-                        {orders.map((order) => (
+                        {orders
+                            .filter(o => filterStatus === 'all' || o.status === filterStatus)
+                            .filter(o => 
+                                o.id?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                                o.customerDetails.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                                o.customerDetails.phone.includes(searchTerm)
+                            )
+                            .map((order) => (
                             <tr 
                                 key={order.id} 
                                 className={`group cursor-pointer transition-colors hover:bg-black/2 ${selectedOrder?.id === order.id ? 'bg-accent/5' : ''}`}

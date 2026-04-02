@@ -17,8 +17,8 @@ export default function AdminLoginPage() {
 
     // Initial simple auth as requested
     if (username === "shohan" && password === "shohan") {
-        // Save auth state in cookie or localStorage for simplicity in this stage
-        localStorage.setItem("admin_auth", "true");
+        // Save auth state in sessionStorage for per-session login
+        sessionStorage.setItem("admin_auth", "true");
         router.push("/admin");
     } else {
         setError("Invalid username or password.");

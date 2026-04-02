@@ -16,10 +16,12 @@ export default function AdminProductsPage() {
     category: "Running",
     status: "in-stock",
     preOrderAdvance: 0,
-    imageUrl: ""
+    imageUrl: "",
+    variants: []
   });
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     fetchProducts();
@@ -47,7 +49,17 @@ export default function AdminProductsPage() {
         finalImageUrl = await uploadImage(imageFile, path);
       }
 
-      const productData = { ...currentProduct, imageUrl: finalImageUrl } as Omit<Product, "id">;
+      if (!finalImageUrl && !imageFile) {
+        alert("Please provide an image URL or upload a file.");
+        setIsSubmitting(false);
+        return;
+      }
+
+      const productData = { 
+        ...currentProduct, 
+        imageUrl: finalImageUrl,
+        variants: currentProduct.variants || []
+      } as Omit<Product, "id">;
 
       if (isEditing && currentProduct.id) {
         await updateProduct(currentProduct.id, productData);
@@ -62,6 +74,26 @@ export default function AdminProductsPage() {
       alert("Error saving product. Check console.");
     }
     setIsSubmitting(false);
+  };
+
+  const addVariant = () => {
+    const newVariant = { type: currentProduct.category === "Bags" ? 'color' : 'size' as any, value: "", stock: 0 };
+    setCurrentProduct({
+        ...currentProduct,
+        variants: [...(currentProduct.variants || []), newVariant]
+    });
+  };
+
+  const removeVariant = (index: number) => {
+    const updated = [...(currentProduct.variants || [])];
+    updated.splice(index, 1);
+    setCurrentProduct({ ...currentProduct, variants: updated });
+  };
+
+  const updateVariant = (index: number, field: string, value: any) => {
+    const updated = [...(currentProduct.variants || [])];
+    updated[index] = { ...updated[index], [field]: value };
+    setCurrentProduct({ ...currentProduct, variants: updated });
   };
 
   const handleEdit = (product: Product) => {
@@ -89,11 +121,17 @@ export default function AdminProductsPage() {
       category: "Running",
       status: "in-stock",
       preOrderAdvance: 0,
-      imageUrl: ""
+      imageUrl: "",
+      variants: []
     });
     setImageFile(null);
     setIsEditing(false);
   };
+
+  const filteredProducts = products.filter(p => 
+    p.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    p.category.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   if (loading) return <div className="py-20 text-center font-black uppercase text-[10px] tracking-widest italic animate-pulse">Scanning Inventory...</div>;
 
@@ -207,17 +245,76 @@ export default function AdminProductsPage() {
                                     />
                                 </div>
                                 <div className="relative">
-                                    <p className="text-[8px] font-black uppercase text-secondary mb-1">Or Upload (Disabled - Use URL Above)</p>
+                                    <p className="text-[8px] font-black uppercase text-secondary mb-1">Or Upload Photo</p>
                                     <input 
                                         type="file" 
-                                        disabled
+                                        onChange={(e) => setImageFile(e.target.files ? e.target.files[0] : null)}
                                         accept="image/*"
-                                        className="text-[10px] opacity-30 cursor-not-allowed"
+                                        className="text-[10px] cursor-pointer block w-full text-secondary
+                                        file:mr-4 file:py-2 file:px-4
+                                        file:rounded-full file:border-0
+                                        file:text-[8px] file:font-black file:uppercase
+                                        file:bg-accent/10 file:text-accent
+                                        hover:file:bg-accent/20"
                                     />
                                 </div>
                             </div>
                         </div>
-                        <p className="text-[8px] text-secondary italic">Firebase Storage is currently disabled. Please use direct image URLs from Unsplash, Imgur, or other sources.</p>
+                    </div>
+                </div>
+
+                {/* Variant Manager */}
+                <div className="space-y-4 pt-4 border-t border-black/5">
+                    <div className="flex justify-between items-center">
+                        <label className="text-[10px] font-black uppercase tracking-widest text-secondary">Variant Stock (Size/Color)</label>
+                        <button 
+                            type="button" 
+                            onClick={addVariant}
+                            className="text-[9px] font-black uppercase text-accent hover:underline flex items-center space-x-1"
+                        >
+                            <span>+ ADD VARIANT</span>
+                        </button>
+                    </div>
+                    
+                    <div className="space-y-3">
+                        {currentProduct.variants?.map((v, idx) => (
+                            <div key={idx} className="flex items-center space-x-3 bg-background p-3 rounded-sm border border-black/5 animate-in fade-in slide-in-from-top-2 duration-300">
+                                <select 
+                                    value={v.type}
+                                    onChange={(e) => updateVariant(idx, 'type', e.target.value as any)}
+                                    className="bg-white border border-black/5 text-[9px] font-black uppercase px-2 py-2 rounded-sm focus:outline-none"
+                                >
+                                    <option value="size">SIZE</option>
+                                    <option value="color">COLOR</option>
+                                </select>
+                                <input 
+                                    type="text"
+                                    placeholder={v.type === 'size' ? "E.G. 42" : "E.G. BLACK"}
+                                    value={v.value}
+                                    onChange={(e) => updateVariant(idx, 'value', e.target.value)}
+                                    className="flex-grow bg-white border border-black/5 text-[10px] font-bold px-3 py-2 rounded-sm focus:outline-none uppercase"
+                                />
+                                <div className="flex items-center space-x-2">
+                                    <label className="text-[8px] font-black uppercase opacity-40">STOCK</label>
+                                    <input 
+                                        type="number"
+                                        value={v.stock}
+                                        onChange={(e) => updateVariant(idx, 'stock', Number(e.target.value))}
+                                        className="w-16 bg-white border border-black/5 text-[10px] font-black px-2 py-2 rounded-sm text-center"
+                                    />
+                                </div>
+                                <button 
+                                    type="button" 
+                                    onClick={() => removeVariant(idx)}
+                                    className="p-1 text-red-400 hover:text-red-600 transition-colors"
+                                >
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+                                </button>
+                            </div>
+                        ))}
+                        {(!currentProduct.variants || currentProduct.variants.length === 0) && (
+                            <p className="text-[9px] text-secondary italic opacity-50 px-2 py-4 text-center border border-dashed border-black/10 rounded-sm">No variants added yet. Track specific sizes or colors here.</p>
+                        )}
                     </div>
                 </div>
 
@@ -243,6 +340,20 @@ export default function AdminProductsPage() {
         </form>
       </div>
 
+      {/* Search Bar */}
+      <div className="relative">
+          <input 
+            type="text" 
+            placeholder="Search products by name or category..." 
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="w-full bg-surface border border-black/5 px-12 py-4 text-xs font-bold uppercase tracking-widest focus:outline-none focus:border-accent shadow-sm"
+          />
+          <div className="absolute left-4 top-1/2 -translate-y-1/2 opacity-30">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          </div>
+      </div>
+
       {/* Product Table */}
       <div className="bg-surface rounded-sm shadow-sm overflow-hidden border border-black/5">
             <div className="overflow-x-auto">
@@ -251,14 +362,14 @@ export default function AdminProductsPage() {
                         <tr>
                             <th className="px-6 py-4">Image</th>
                             <th className="px-6 py-4">Product</th>
+                            <th className="px-6 py-4">Inventory</th>
                             <th className="px-6 py-4">Price</th>
                             <th className="px-6 py-4">Category</th>
-                            <th className="px-6 py-4">Status</th>
                             <th className="px-6 py-4 text-right">Actions</th>
                         </tr>
                     </thead>
                     <tbody className="divide-y divide-black/5">
-                        {products.map((p) => (
+                        {filteredProducts.map((p) => (
                             <tr key={p.id} className="hover:bg-black/2 transition-colors">
                                 <td className="px-6 py-4">
                                     <div className="relative w-12 h-12 bg-background p-2">
@@ -267,15 +378,25 @@ export default function AdminProductsPage() {
                                 </td>
                                 <td className="px-6 py-4">
                                     <p className="text-xs font-black uppercase italic tracking-tighter">{p.name}</p>
-                                    <p className="text-[8px] text-secondary truncate max-w-[200px]">{p.description}</p>
-                                </td>
-                                <td className="px-6 py-4 font-heading font-black text-xs text-accent">৳ {p.price.toLocaleString()}</td>
-                                <td className="px-6 py-4 text-[10px] font-bold uppercase tracking-widest text-secondary">{p.category}</td>
-                                <td className="px-6 py-4">
-                                     <span className={`text-[8px] font-black px-2 py-0.5 rounded-full uppercase tracking-tighter border ${p.status === 'in-stock' ? 'bg-green-500/10 text-green-600 border-green-500/20' : 'bg-accent/10 text-accent border-accent/20'}`}>
+                                    <span className={`text-[7px] font-black px-1.5 py-0.5 rounded-full uppercase border mt-1 inline-block ${p.status === 'in-stock' ? 'bg-green-500/10 text-green-600 border-green-500/20' : 'bg-accent/10 text-accent border-accent/20'}`}>
                                         {p.status}
                                     </span>
                                 </td>
+                                <td className="px-6 py-4">
+                                    <div className="flex flex-wrap gap-1">
+                                        {p.variants && p.variants.length > 0 ? (
+                                            p.variants.map((v, i) => (
+                                                <div key={i} className="text-[7px] font-black bg-black/5 px-2 py-1 rounded-sm border border-black/5">
+                                                    {v.value}: <span className={v.stock > 0 ? "text-green-600" : "text-red-500"}>{v.stock}</span>
+                                                </div>
+                                            ))
+                                        ) : (
+                                            <span className="text-[8px] text-secondary italic opacity-40">No Variants</span>
+                                        )}
+                                    </div>
+                                </td>
+                                <td className="px-6 py-4 font-heading font-black text-xs text-accent whitespace-nowrap">৳ {p.price.toLocaleString()}</td>
+                                <td className="px-6 py-4 text-[10px] font-bold uppercase tracking-widest text-secondary whitespace-nowrap">{p.category}</td>
                                 <td className="px-6 py-4 text-right">
                                     <div className="flex justify-end space-x-2">
                                         <button onClick={() => handleEdit(p)} className="p-2 hover:bg-blue-500/10 text-blue-600 rounded-sm transition-colors">
@@ -288,6 +409,11 @@ export default function AdminProductsPage() {
                                 </td>
                             </tr>
                         ))}
+                        {filteredProducts.length === 0 && (
+                            <tr>
+                                <td colSpan={6} className="py-20 text-center text-[10px] font-black uppercase opacity-30 italic">No products matched your search.</td>
+                            </tr>
+                        )}
                     </tbody>
                 </table>
             </div>
