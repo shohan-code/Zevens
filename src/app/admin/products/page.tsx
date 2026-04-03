@@ -41,39 +41,51 @@ export default function AdminProductsPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
+    
+    // Create a timeout promise
+    const timeout = new Promise((_, reject) => 
+      setTimeout(() => reject(new Error("Request timed out. Please check your internet or Vercel environment variables.")), 30000)
+    );
+
     try {
-      let finalImageUrl = currentProduct.imageUrl;
+      await Promise.race([
+        (async () => {
+          let finalImageUrl = currentProduct.imageUrl;
 
-      if (imageFile) {
-        const path = `products/${Date.now()}_${imageFile.name}`;
-        finalImageUrl = await uploadImage(imageFile, path);
-      }
+          if (imageFile) {
+            const path = `products/${Date.now()}_${imageFile.name}`;
+            finalImageUrl = await uploadImage(imageFile, path);
+          }
 
-      if (!finalImageUrl && !imageFile) {
-        alert("Please provide an image URL or upload a file.");
-        setIsSubmitting(false);
-        return;
-      }
+          if (!finalImageUrl && !imageFile) {
+            throw new Error("Please provide an image URL or upload a file.");
+          }
 
-      const productData = { 
-        ...currentProduct, 
-        imageUrl: finalImageUrl,
-        variants: currentProduct.variants || []
-      } as Omit<Product, "id">;
+          const { id, ...dataToSave } = currentProduct;
+          const productData = { 
+            ...dataToSave, 
+            imageUrl: finalImageUrl,
+            variants: currentProduct.variants || []
+          } as Omit<Product, "id">;
 
-      if (isEditing && currentProduct.id) {
-        await updateProduct(currentProduct.id, productData);
-      } else {
-        await addProduct(productData);
-      }
+          if (isEditing && id) {
+            await updateProduct(id, productData);
+          } else {
+            await addProduct(productData);
+          }
 
-      fetchProducts();
-      resetForm();
-    } catch (error) {
-        console.error("Error saving product:", error);
-      alert("Error saving product. Check console.");
+          await fetchProducts();
+          resetForm();
+          alert(isEditing ? "Product updated!" : "Product launched successfully!");
+        })(),
+        timeout
+      ]);
+    } catch (error: any) {
+      console.error("Submission error:", error);
+      alert(error.message || "Error saving product. Make sure your Vercel Environment Variables are set correctly.");
+    } finally {
+      setIsSubmitting(false);
     }
-    setIsSubmitting(false);
   };
 
   const addVariant = () => {

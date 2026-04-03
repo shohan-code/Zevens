@@ -1,23 +1,33 @@
+"use client";
+
 import HeroSection from "@/components/home/HeroSection";
 import FeaturedProducts from "@/components/home/FeaturedProducts";
 import Image from "next/image";
 import Link from "next/link";
-
-const SHOE_PRODUCTS = [
-  { id: "1", name: "Aether Blue Edition", price: 18500, image: "/images/prod1.png", gender: "Men" },
-  { id: "2", name: "Neon Velocity", price: 14200, image: "/images/prod2.png", gender: "Women" },
-  { id: "3", name: "Urban Lux Gold", price: 22000, image: "/images/prod3.png", gender: "Men" },
-  { id: "4", name: "Stealth Runner", price: 15500, image: "/images/prod2.png", gender: "Women" }
-];
-
-const BAG_PRODUCTS = [
-  { id: "b1", name: "Urban Stealth Backpack", price: 12500, image: "/images/hero.png", gender: "Men" },
-  { id: "b2", name: "Lux Handbag Gold", price: 28000, image: "/images/prod3.png", gender: "Women" },
-  { id: "b3", name: "Daily Sling Bag", price: 8500, image: "/images/prod1.png", gender: "Unisex" },
-  { id: "b4", name: "Elite Travel Duffle", price: 32000, image: "/images/prod2.png", gender: "Men" }
-];
+import { useEffect, useState } from "react";
+import { getProducts, Product } from "@/lib/firebase/firestore";
 
 export default function Home() {
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchAll = async () => {
+      try {
+        const data = await getProducts();
+        setProducts(data);
+      } catch (error) {
+        console.error("Error fetching home products:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchAll();
+  }, []);
+
+  const shoeProducts = products.filter(p => p.category.toLowerCase() === "running" || p.category.toLowerCase() === "lifestyle").slice(0, 4);
+  const bagProducts = products.filter(p => p.category.toLowerCase() === "bags").slice(0, 4);
+
   return (
     <div className="min-h-screen">
       <HeroSection />
@@ -109,18 +119,27 @@ export default function Home() {
                 <h2 className="text-2xl md:text-3xl font-heading font-black italic tracking-tighter uppercase italic">SHOP <span className="text-accent">SHOES.</span></h2>
                 <Link href="/products?category=shoes" className="text-[10px] font-black tracking-[0.2em] hover:text-accent transition-colors uppercase italic underline underline-offset-4">View All Footwear</Link>
             </div>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-                {SHOE_PRODUCTS.map((product) => (
-                    <div key={product.id} className="group cursor-pointer">
-                        <div className="aspect-square bg-surface mb-4 relative overflow-hidden group-hover:shadow-lg transition-all duration-300">
-                             <Image src={product.image} alt={product.name} fill className="object-contain p-8 transform group-hover:scale-110 transition-transform duration-500" />
-                             <div className="absolute bottom-4 left-4 bg-primary text-white text-[8px] font-black px-2 py-1 uppercase tracking-widest">{product.gender}</div>
+            {loading ? (
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-6 animate-pulse">
+                    {[1,2,3,4].map(n => <div key={n} className="aspect-square bg-gray-100 rounded-sm" />)}
+                </div>
+            ) : (
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+                    {shoeProducts.map((product) => (
+                        <div key={product.id} className="group cursor-pointer">
+                            <Link href={`/products/${product.id}`}>
+                                <div className="aspect-square bg-surface mb-4 relative overflow-hidden group-hover:shadow-lg transition-all duration-300">
+                                    <Image src={product.imageUrl} alt={product.name} fill className="object-contain p-8 transform group-hover:scale-110 transition-transform duration-500" />
+                                    <div className="absolute bottom-4 left-4 bg-primary text-white text-[8px] font-black px-2 py-1 uppercase tracking-widest">{product.category}</div>
+                                </div>
+                                <h3 className="font-heading font-bold text-xs uppercase truncate">{product.name}</h3>
+                                <p className="font-heading font-black text-sm text-accent">৳ {product.price.toLocaleString()}</p>
+                            </Link>
                         </div>
-                        <h3 className="font-heading font-bold text-xs uppercase truncate">{product.name}</h3>
-                        <p className="font-heading font-black text-sm text-accent">৳ {product.price.toLocaleString()}</p>
-                    </div>
-                ))}
-            </div>
+                    ))}
+                    {shoeProducts.length === 0 && <p className="col-span-full py-10 text-center text-[10px] uppercase font-bold opacity-30 italic">No footwear found in collection.</p>}
+                </div>
+            )}
         </div>
       </section>
 
@@ -131,18 +150,27 @@ export default function Home() {
                 <h2 className="text-2xl md:text-3xl font-heading font-black italic tracking-tighter uppercase italic">SHOP <span className="text-accent">BAGS.</span></h2>
                 <Link href="/products?category=bags" className="text-[10px] font-black tracking-[0.2em] hover:text-accent transition-colors uppercase italic underline underline-offset-4">View All Accessories</Link>
             </div>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-                {BAG_PRODUCTS.map((product) => (
-                    <div key={product.id} className="group cursor-pointer">
-                        <div className="aspect-square bg-surface mb-4 relative overflow-hidden group-hover:shadow-lg transition-all duration-300">
-                             <Image src={product.image} alt={product.name} fill className="object-contain p-8 transform group-hover:scale-110 transition-transform duration-500" />
-                             <div className="absolute bottom-4 left-4 bg-primary text-white text-[8px] font-black px-2 py-1 uppercase tracking-widest">{product.gender}</div>
+            {loading ? (
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-6 animate-pulse">
+                    {[1,2,3,4].map(n => <div key={n} className="aspect-square bg-gray-100 rounded-sm" />)}
+                </div>
+            ) : (
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+                    {bagProducts.map((product) => (
+                        <div key={product.id} className="group cursor-pointer">
+                            <Link href={`/products/${product.id}`}>
+                                <div className="aspect-square bg-surface mb-4 relative overflow-hidden group-hover:shadow-lg transition-all duration-300">
+                                    <Image src={product.imageUrl} alt={product.name} fill className="object-contain p-8 transform group-hover:scale-110 transition-transform duration-500" />
+                                    <div className="absolute bottom-4 left-4 bg-primary text-white text-[8px] font-black px-2 py-1 uppercase tracking-widest">{product.category}</div>
+                                </div>
+                                <h3 className="font-heading font-bold text-xs uppercase truncate">{product.name}</h3>
+                                <p className="font-heading font-black text-sm text-accent">৳ {product.price.toLocaleString()}</p>
+                            </Link>
                         </div>
-                        <h3 className="font-heading font-bold text-xs uppercase truncate">{product.name}</h3>
-                        <p className="font-heading font-black text-sm text-accent">৳ {product.price.toLocaleString()}</p>
-                    </div>
-                ))}
-            </div>
+                    ))}
+                    {bagProducts.length === 0 && <p className="col-span-full py-10 text-center text-[10px] uppercase font-bold opacity-30 italic">No bags found in collection.</p>}
+                </div>
+            )}
         </div>
       </section>
 
@@ -170,3 +198,4 @@ export default function Home() {
     </div>
   );
 }
+
